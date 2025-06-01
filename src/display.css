@@ -1,0 +1,9 @@
+.card{
+    grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
+}
+.nav{
+    grid-template-columns: repeat(auto-fill,minmax(300px,3fr));
+}
+.icon{
+    grid-template-columns: repeat(auto-fill,minmax(40px,2fr));
+}

@@ -1,0 +1,8 @@
+@import "tailwindcss";
+@font-face {
+    font-family: Montserrat;
+    src: url(/font/WDXL_Lubrifont_TC/WDXLLubrifontTC-Regular.ttf);
+}
+*{
+    font-family: Montserrat;
+}
