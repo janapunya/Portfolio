@@ -7,3 +7,33 @@
 .icon{
     grid-template-columns: repeat(auto-fill,minmax(40px,2fr));
 }
+@media screen and (max-width: 765px) {
+    .hello{
+        font-size: 60px;
+    }
+    .punya{
+        font-size: 60px;
+    }
+}
+@media screen and (max-width: 510px) {
+    .hello{
+        font-size: 40px;
+    }
+    .punya{
+        font-size: 40px;
+    }
+}
+@media screen and (max-width: 400px) {
+    .hello{
+        font-size: 30px;
+    }
+    .punya{
+        font-size: 30px;
+    }
+}
+@media screen and (max-width: 550px) {
+    .nav ,.total_name,.about_me ,.work_container,.contact_container{
+        font-size: 15px;
+        padding: 0px 15px;
+    }
+}

@@ -16,9 +16,9 @@ export default function AnimatedText() {
   }, []);
 
   return (
-    <div className='flex text-8xl opacity-80'>
+    <div className='flex text-8xl punya opacity-80'>
       {text.split('').map((c, i) => (
-        <span key={i} ref={el => refs.current[i] = el} style={{ whiteSpace: 'pre' }}>{c}</span>
+        <span  key={i} ref={el => refs.current[i] = el} style={{ whiteSpace: 'pre' }}>{c}</span>
       ))}
     </div>
   );
