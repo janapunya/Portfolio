@@ -1,5 +1,5 @@
 .card{
-    grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
+    grid-template-columns: repeat(auto-fill,minmax(300px,1fr));
 }
 .nav{
     grid-template-columns: repeat(auto-fill,minmax(300px,3fr));
@@ -7,6 +7,10 @@
 .icon{
     grid-template-columns: repeat(auto-fill,minmax(40px,2fr));
 }
+.techonology {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  }
+  
 @media screen and (max-width: 765px) {
     .hello{
         font-size: 60px;
