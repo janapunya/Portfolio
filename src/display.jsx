@@ -22,7 +22,7 @@ function Display() {
       <Technology/>
 
         <div className=' mt-10 px-15 work_container' id='work'>
-          <h1 className='text-4xl mb-10'>My Work</h1>
+          <h1 className='text-4xl my-10'>My Work</h1>
           <div className='card grid gap-3'>
             <Card />
           </div>

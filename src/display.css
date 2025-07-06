@@ -36,7 +36,7 @@
     }
 }
 @media screen and (max-width: 550px) {
-    .nav ,.total_name,.about_me ,.work_container,.contact_container{
+    .nav ,.total_name,.about_me ,.work_container,.contact_container,.Technology{
         font-size: 15px;
         padding: 0px 15px;
     }
