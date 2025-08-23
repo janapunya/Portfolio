@@ -13,7 +13,7 @@ function App() {
         sparkCount={11}
         duration={1200}
       >
-        <div className='bg-zinc-950 text-white h-auto z-0'>
+        <div className='bg-zinc-950 text-white h-auto'>
 
             <Display />
         </div>

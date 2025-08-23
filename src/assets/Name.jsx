@@ -3,7 +3,7 @@ import gsap from 'gsap';
 
 export default function AnimatedText() {
   const refs = useRef([]);
-  const text = "PUNYABRATA JANA";
+  const text = " Punyabrata Jana";
 
   useEffect(() => {
     gsap.from(refs.current, {
@@ -11,15 +11,26 @@ export default function AnimatedText() {
       opacity: 0,
       stagger: 0.08,
       duration: 0.7,
-      ease: 'back.inOut',
+      ease: 'back.Out',
     });
   }, []);
 
   return (
-    <div className='flex text-8xl punya opacity-80'>
-      {text.split('').map((c, i) => (
-        <span  key={i} ref={el => refs.current[i] = el} style={{ whiteSpace: 'pre' }}>{c}</span>
-      ))}
-    </div>
+    <span className='flex overflow-hidden text-white'>
+  {text.split('').map((c, i) => (
+    <span  
+      key={i} 
+      ref={el => refs.current[i] = el}
+      className='text-zinc-900'
+      style={{ 
+        whiteSpace: 'pre',
+        WebkitTextStroke: '1px oklch(82.8% 0.189 84.429)',        
+      }}
+    >
+      {c}
+    </span>
+  ))}
+</span>
+
   );
 }
