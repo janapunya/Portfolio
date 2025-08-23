@@ -110,7 +110,7 @@ export default function Footer() {
               </a>
 
               <a
-                href="https://linkedin.com/in/your-profile"
+                href="https://www.linkedin.com/in/punya-brata-jana-01837627b"
                 target="_blank"
                 rel="noreferrer"
                 className="p-2 rounded-md bg-zinc-800 hover:bg-zinc-700 transition"
