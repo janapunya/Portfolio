@@ -10,10 +10,55 @@
     <meta name="keywords" content="Punyabrata Jana,punya brata jana, Portfolio, BCA, CCLMS, MAKAUT,punya">
     <meta name="robots" content="index, follow">
     <meta name="google-site-verification" content="91TpCc_ZO-0l4ZygKBhxw4zwmZQ1GvJKE3YYtThlHFc" />
-    <meta name="robots" content="index, follow">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   </head>
-  <body>
+  <body class="bg-black">
+
+    <div id="preloader" class="fixed inset-0 flex items-center justify-center bg-black text-white z-[9999] overflow-hidden">
+      <h1 class="text-4xl sm:text-6xl font-extrabold flex">
+        <span id="name-left" class="inline-block">Punya</span>
+        <span id="name-right" class="inline-block">brata</span>
+      </h1>
+    </div>
+
+
     <div id="root"></div>
+
     <script type="module" src="/src/main.jsx"></script>
+
+    <script>
+      window.addEventListener("load", () => {
+        const tl = gsap.timeline();
+
+
+        tl.from("#name-left, #name-right", {
+          y: 50,
+          opacity: 0,
+          duration: 1,
+          ease: "back.inOut",
+          stagger: 0.1
+        });
+
+        tl.to("#name-left", {
+          x: "-700%",
+          duration: 1,
+          ease: "back.Out"
+        }, "+=1");
+
+        tl.to("#name-right", {
+          x: "700%",
+          duration: 1,
+          ease: "back.Out"
+        }, "<"); 
+r
+        tl.to("#preloader", {
+          opacity: 0,
+          duration: 1,
+          ease: "back.inOut",
+          onComplete: () => document.getElementById("preloader")?.remove()
+        });
+      });
+    </script>
   </body>
 </html>
