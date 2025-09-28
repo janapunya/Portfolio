@@ -11,12 +11,12 @@ const logos = [
   { src: "/images/html.png", alt: "HTML5" },
   { src: "/images/css.png", alt: "CSS3" },
   { src: "/images/js.png", alt: "JavaScript" },
-  { src: "/images/bootStrap.png", alt: "Bootstrap" },
+  { src: "/images/BootStrap.png", alt: "Bootstrap" },
   { src: "/images/tailwind.png", alt: "Tailwind CSS" },
   { src: "/images/gssap.png", alt: "GSAP" },
   { src: "/images/react.png", alt: "React" },
   { src: "/images/node_js.png", alt: "Node.js" },
-  { src: "/images/Mongodb.png", alt: "MongoDB" },
+  { src: "/images/mongodb.png", alt: "MongoDB" },
   { src: "/images/socket.io.png", alt: "socket.io" },
 
 ];

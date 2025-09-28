@@ -12,6 +12,15 @@ const initialProjects = [
       "Responsive bike showroom UI built with Bootstrap and optimized for mobile & desktop.",
     live: "https://janapunya.github.io/Bike-website/",
   },
+  {
+    id: 1,
+    title: "E_commerce",
+    img: "/images/project2.png",
+    tech: ["React", "CSS3","Tailwindcss", "Node Js","exprerss Js","MongoBD", "Responsive"],
+    short:
+      "Responsive E_commerce website backend built normal CRUD operations , UI built with react and optimized for mobile & desktop.",
+    live: "https://prime-bazaar-one.vercel.app/",
+  },
  
 ];
 
