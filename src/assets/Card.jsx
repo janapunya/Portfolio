@@ -11,15 +11,27 @@ const initialProjects = [
     short:
       "Responsive bike showroom UI built with Bootstrap and optimized for mobile & desktop.",
     live: "https://janapunya.github.io/Bike-website/",
+    gitRepoLink:"https://github.com/janapunya/Bike-website.git",
   },
   {
-    id: 1,
+    id: 2,
     title: "E_commerce",
     img: "/images/project2.png",
     tech: ["React", "CSS3","Tailwindcss", "Node Js","exprerss Js","MongoBD", "Responsive"],
     short:
       "Responsive E_commerce website backend built normal CRUD operations , UI built with react and optimized for mobile & desktop.",
     live: "https://prime-bazaar-one.vercel.app/",
+    gitRepoLink:"https://github.com/janapunya/PrimeBazaar.git",
+  },
+  {
+    id: 3,
+    title: "GPTclone",
+    img: "/images/GPTclone.png",
+    tech: ["React", "CSS3","Tailwindcss", "Node Js","exprerss Js","MongoBD", "Responsive","socket.io","vector database",],
+    short:
+   "A responsive ChatGPT clone website that handles AI responses and manages short-term and long-term data using Pinecone. It features real-time data transfer through Socket.IO and a modern, fully optimized UI built with React for both mobile and desktop devices.",
+    live: "https://gp-tclone.vercel.app/",
+    gitRepoLink:"https://github.com/janapunya/GPTclone.git",
   },
  
 ];
@@ -145,12 +157,19 @@ export default function ProjectShowcase() {
             </div>
 
             {/* Body */}
-            <div className="p-4 bg-zinc-300">
+            <div className="p-4 bg-zinc-300 border-2 h-full" >
               <div className="flex items-start justify-between gap-2">
                 <div>
+                  <div className=" flex">
                   <h4 className="text-lg font-semibold text-gray-900">
                     {p.title}
                   </h4>
+                  <a href={p.gitRepoLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="ml-4  text-indigo-600 hover:text-indigo-800 text-[17px] font-medium ">Show Code</a>
+                  </div>
+                  
                   <p className="text-sm text-gray-500 mt-1 line-clamp-2">
                     {p.short}
                   </p>
@@ -247,6 +266,12 @@ export default function ProjectShowcase() {
                   >
                     Open Live
                   </a>
+
+                  <a href={modalProject.gitRepoLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm hover:bg-indigo-700 ">Show Code</a>
+
 
                 </div>
               </div>
