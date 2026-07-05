@@ -1,284 +1,285 @@
-import React, { useState, useMemo, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+import { PROJECTS } from "./data";
 
-
-
-const initialProjects = [
-  {
-    id: 1,
-    title: "Bike Website",
-    img: "/images/bike.png",
-    tech: ["HTML5", "CSS3", "Bootstrap", "Responsive"],
-    short:
-      "Responsive bike showroom UI built with Bootstrap and optimized for mobile & desktop.",
-    live: "https://janapunya.github.io/Bike-website/",
-    gitRepoLink:"https://github.com/janapunya/Bike-website.git",
-  },
-  {
-    id: 2,
-    title: "E_commerce",
-    img: "/images/project2.png",
-    tech: ["React", "CSS3","Tailwindcss", "Node Js","exprerss Js","MongoBD", "Responsive"],
-    short:
-      "Responsive E_commerce website backend built normal CRUD operations , UI built with react and optimized for mobile & desktop.",
-    live: "https://prime-bazaar-one.vercel.app/",
-    gitRepoLink:"https://github.com/janapunya/PrimeBazaar.git",
-  },
-  {
-    id: 3,
-    title: "GPTclone",
-    img: "/images/GPTclone.png",
-    tech: ["React", "CSS3","Tailwindcss", "Node Js","exprerss Js","MongoBD", "Responsive","socket.io","vector database",],
-    short:
-   "A responsive ChatGPT clone website that handles AI responses and manages short-term and long-term data using Pinecone. It features real-time data transfer through Socket.IO and a modern, fully optimized UI built with React for both mobile and desktop devices.",
-    live: "https://gp-tclone.vercel.app/",
-    gitRepoLink:"https://github.com/janapunya/GPTclone.git",
-  },
- 
+/* ── per-project accent colours ── */
+const ACCENTS = [
+  { dot: "#7c6fff", glow: "rgba(124,111,255,0.4)",  ring: "rgba(124,111,255,0.18)", line: "rgba(124,111,255,0.4)"  },
+  { dot: "#ff6bcd", glow: "rgba(255,107,205,0.4)",  ring: "rgba(255,107,205,0.18)", line: "rgba(255,107,205,0.4)"  },
+  { dot: "#00d4ff", glow: "rgba(0,212,255,0.4)",    ring: "rgba(0,212,255,0.18)",   line: "rgba(0,212,255,0.4)"    },
+  { dot: "#4ade80", glow: "rgba(74,222,128,0.4)",   ring: "rgba(74,222,128,0.18)",  line: "rgba(74,222,128,0.4)"   },
+  { dot: "#fbbf24", glow: "rgba(251,191,36,0.4)",   ring: "rgba(251,191,36,0.18)",  line: "rgba(251,191,36,0.4)"   },
 ];
 
-export default function ProjectShowcase() {
-  const [projects] = useState(initialProjects);
-  const [activeFilter, setActiveFilter] = useState("All");
-  const [query, setQuery] = useState("");
-  const [modalProject, setModalProject] = useState(null);
+const BADGE_STYLE = {
+  "Featured":   { bg: "rgba(124,111,255,0.15)", color: "#a78bfa", border: "rgba(124,111,255,0.3)" },
+  "Web Design": { bg: "rgba(74,222,128,0.12)",  color: "#86efac", border: "rgba(74,222,128,0.25)" },
+  "Clone":      { bg: "rgba(0,212,255,0.12)",   color: "#67e8f9", border: "rgba(0,212,255,0.25)"  },
+  "Full Stack": { bg: "rgba(255,107,205,0.12)", color: "#f9a8d4", border: "rgba(255,107,205,0.25)"},
+};
 
-  const techList = useMemo(() => {
-    const all = new Set();
-    projects.forEach((p) => p.tech.forEach((t) => all.add(t)));
-    return ["All", ...Array.from(all).sort()];
-  }, [projects]);
-
-  const filtered = useMemo(() => {
-    return projects.filter((p) => {
-      const byFilter = activeFilter === "All" || p.tech.includes(activeFilter);
-      const byQuery =
-        query.trim() === "" ||
-        p.title.toLowerCase().includes(query.toLowerCase()) ||
-        p.short.toLowerCase().includes(query.toLowerCase());
-      return byFilter && byQuery;
-    });
-  }, [projects, activeFilter, query]);
+/* ── Single timeline item ── */
+function TimelineItem({ project, index, accent }) {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const badge = BADGE_STYLE[project.badge] || BADGE_STYLE["Clone"];
 
   useEffect(() => {
-    function onKey(e) {
-      if (e.key === "Escape") setModalProject(null);
-    }
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    const observer = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) setVisible(true); },
+      { threshold: 0.25 }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <section className=" mx-auto sm:px-10 px-7 py-12">
-      {/* Header */}
-      <div className="mb-8">
-        <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-500">
-          Selected <span className="text-amber-500">Projects</span>
-        </h2>
-        <p className="mt-2 text-md text-gray-500 max-w-2xl">
-          A compact showcase of selected works — click any card to read more
-          or open the live demo / source code.
-        </p>
+    <div
+      ref={ref}
+      className="relative mb-12 last:mb-0"
+      style={{
+        paddingLeft: 40,
+        opacity:     visible ? 1 : 0,
+        transform:   visible ? "translateX(0)" : "translateX(28px)",
+        transition:  `opacity 0.6s ease ${index * 130}ms, transform 0.6s ease ${index * 130}ms`,
+      }}
+    >
+      {/* ── Dot on the line ── */}
+      <div
+        className="absolute rounded-full z-10"
+        style={{
+          left:      -7,
+          top:       20,
+          width:     14,
+          height:    14,
+          background: "#060610",
+          border:    `2px solid ${accent.dot}`,
+          boxShadow: visible
+            ? `0 0 0 5px ${accent.ring}, 0 0 18px ${accent.glow}`
+            : `0 0 0 4px ${accent.ring}`,
+          transition: "box-shadow 0.5s ease",
+        }}
+      />
+
+      {/* ── Horizontal connector from dot to card ── */}
+      <div
+        className="absolute"
+        style={{
+          left:       7,
+          top:        26,
+          width:      33,
+          height:     1,
+          background: `linear-gradient(90deg, ${accent.line}, transparent)`,
+        }}
+      />
+
+      {/* ── Year label (left of the line) ── */}
+      <div
+        className="absolute text-right font-mono text-[10px] tracking-widest uppercase text-[#6868a0]"
+        style={{ left: -80, top: 15, width: 60 }}
+      >
+        {project.year || "2024"}
       </div>
 
-      {/* Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        {/* Filters */}
-        <div className="flex flex-wrap gap-2">
-          {techList.map((t) => (
-            <button
-              key={t}
-              onClick={() => setActiveFilter(t)}
-              className={`text-sm px-4 py-2 rounded-full duration-400  text-white
-                ${
-                  activeFilter === t
-                    ? "bg-amber-600/70"
-                    : "bg-stone-800 border-gray-700 hover:bg-stone-700"
-                }`}
-            >
-              {t}
-            </button>
-          ))}
+      {/* ── Card ── */}
+      <div
+        className="relative rounded-2xl overflow-hidden transition-all duration-300"
+        style={{
+          background:   "#0e0e1c",
+          border:       `1px solid ${hovered ? "rgba(124,111,255,0.38)" : "rgba(124,111,255,0.13)"}`,
+          transform:    hovered ? "translateX(6px)" : "translateX(0)",
+          boxShadow:    hovered ? `0 16px 40px ${accent.glow}` : "none",
+          padding:      "22px 26px",
+        }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
+        {/* Left glow strip */}
+        <div
+          className="absolute left-0 top-0 bottom-0 rounded-l-2xl transition-opacity duration-300"
+          style={{
+            width:      3,
+            background: `linear-gradient(180deg, ${accent.dot}, ${ACCENTS[(index + 1) % ACCENTS.length].dot})`,
+            opacity:    hovered ? 1 : 0,
+          }}
+        />
+
+        {/* Top row: badge + number */}
+        <div className="flex items-start justify-between mb-3 gap-3">
+          <span
+            className="font-mono text-[10px] tracking-widest uppercase px-3 py-1 rounded-full"
+            style={{
+              background: badge.bg,
+              color:      badge.color,
+              border:     `1px solid ${badge.border}`,
+            }}
+          >
+            {project.featured ? "✦ " : ""}{project.badge}
+          </span>
+          <span
+            className="font-black leading-none flex-shrink-0 select-none"
+            style={{
+              fontFamily: "'Syne', sans-serif",
+              fontSize:   "3rem",
+              color:      "rgba(255,255,255,0.04)",
+            }}
+          >
+            {String(index + 1).padStart(2, "0")}
+          </span>
         </div>
 
+        {/* Title */}
+        <h3
+          className="font-black tracking-tight mb-2 transition-colors duration-200"
+          style={{
+            fontFamily: "'Syne', sans-serif",
+            fontSize:   "1.25rem",
+            color:      hovered ? "#c4b8ff" : "#e8e4f0",
+          }}
+        >
+          {project.title}
+        </h3>
+
+        {/* Description */}
+        <p className="text-sm leading-relaxed font-light mb-4" style={{ color: "rgba(232,228,240,0.48)" }}>
+          {project.desc}
+        </p>
+
+        {/* Footer: stack pills + link */}
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <div className="flex gap-1.5 flex-wrap">
+            {project.stack.map((s) => (
+              <span
+                key={s}
+                className="font-mono text-[11px] px-2.5 py-1 rounded-md transition-all duration-300"
+                style={{
+                  background:  hovered ? "rgba(124,111,255,0.1)"  : "rgba(255,255,255,0.04)",
+                  border:      `1px solid ${hovered ? "rgba(124,111,255,0.28)" : "rgba(255,255,255,0.08)"}`,
+                  color:       hovered ? "rgba(200,195,255,0.85)" : "rgba(232,228,240,0.5)",
+                }}
+              >
+                {s}
+              </span>
+            ))}
+          </div>
+
+          <a
+            href={project.link}
+            target="_blank"
+            rel="noreferrer"
+            className="font-mono text-[11px] tracking-wider no-underline inline-flex items-center gap-1.5 transition-all duration-200"
+            style={{ color: hovered ? "#a78bfa" : "#7c6fff" }}
+          >
+            GitHub
+            <span style={{ transition: "transform 0.2s", transform: hovered ? "translateX(3px)" : "translateX(0)" }}>→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Main section ── */
+export default function Card() {
+  const lineRef    = useRef(null);
+  const wrapRef    = useRef(null);
+  const sectionRef = useRef(null);
+  const [secVisible, setSecVisible] = useState(false);
+
+  /* fill the vertical line as user scrolls */
+  useEffect(() => {
+    const updateLine = () => {
+      const wrap = wrapRef.current;
+      const fill = lineRef.current;
+      if (!wrap || !fill) return;
+      const rect   = wrap.getBoundingClientRect();
+      const viewed = Math.max(0, window.innerHeight - rect.top);
+      const pct    = Math.min(100, (viewed / rect.height) * 110);
+      fill.style.height = pct + "%";
+    };
+    window.addEventListener("scroll", updateLine, { passive: true });
+    updateLine();
+    return () => window.removeEventListener("scroll", updateLine);
+  }, []);
+
+  /* fade in section heading */
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) setSecVisible(true); },
+      { threshold: 0.08 }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section
+      id="projects"
+      ref={sectionRef}
+      className="relative z-10 px-10 md:px-16 py-24"
+      style={{ background: "rgba(14,14,28,0.4)" }}
+    >
+      {/* Section header */}
+      <div
+        style={{
+          opacity:   secVisible ? 1 : 0,
+          transform: secVisible ? "translateY(0)" : "translateY(20px)",
+          transition: "opacity 0.6s ease, transform 0.6s ease",
+        }}
+      >
+        <div className="flex items-center gap-3 text-purple-400 text-[11px] tracking-[0.2em] uppercase font-mono mb-3.5">
+          <span className="w-6 h-px bg-purple-500 inline-block" />
+          Selected Work
+        </div>
+
+        <div className="flex items-end justify-between mb-16 flex-wrap gap-4">
+          <h2
+            className="font-black tracking-tight leading-tight"
+            style={{ fontFamily: "'Syne',sans-serif", fontSize: "clamp(2rem,4vw,3.2rem)" }}
+          >
+            Project{" "}
+            <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              Journey
+            </span>
+          </h2>
+          <span className="font-mono text-[11px] text-[#6868a0] tracking-widest uppercase pb-1">
+            {PROJECTS.length} projects built
+          </span>
+        </div>
       </div>
 
-      {/* Grid */}
-      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {filtered.map((p) => (
-          <article
-            key={p.id}
-            className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition transform hover:-translate-y-1 max-w-100 "
-          >
-            {/* Big image area */}
-            <div
-              className="relative h-44 sm:h-48 md:h-44 lg:h-40 overflow-hidden "
-              role="button"
-              tabIndex={0}
-              onClick={() => setModalProject(p)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") setModalProject(p);
-              }}
-              aria-label={`Open ${p.title} details`}
-            >
-              <img
-                src={p.img}
-                alt={p.title}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                loading="lazy"
-              />
+      {/* Timeline wrapper */}
+      <div
+        ref={wrapRef}
+        className="relative"
+        style={{ paddingLeft: 80 }}        /* room for year labels + line */
+      >
+        {/* ── Vertical line ── */}
+        <div
+          className="absolute top-0 bottom-0 rounded-full overflow-hidden"
+          style={{ left: 73, width: 2, background: "rgba(124,111,255,0.1)" }}
+        >
+          <div
+            ref={lineRef}
+            className="w-full rounded-full"
+            style={{
+              height:     "0%",
+              background: "linear-gradient(180deg,#7c6fff 0%,#00d4ff 50%,#ff6bcd 100%)",
+              transition: "height 0.3s ease",
+            }}
+          />
+        </div>
 
-              {/* Overlay */}
-              <div
-                className="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4"
-                aria-hidden="true"
-              >
-                <div className="w-full flex justify-between items-end">
-                  <div>
-                    <h3 className="text-white text-base font-semibold">
-                      {p.title}
-                    </h3>
-                    <p className="text-xs text-white/80 mt-1 line-clamp-2">
-                      {p.short}
-                    </p>
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    <a
-                      href={p.live}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-xs inline-block px-3 py-1 rounded-md bg-white/10 text-white border border-white/20 hover:bg-white/20"
-                    >
-                      Live
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Body */}
-            <div className="p-4 bg-zinc-300 border-2 h-full" >
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <div className=" flex">
-                  <h4 className="text-lg font-semibold text-gray-900">
-                    {p.title}
-                  </h4>
-                  <a href={p.gitRepoLink}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="ml-4  text-indigo-600 hover:text-indigo-800 text-[17px] font-medium ">Show Code</a>
-                  </div>
-                  
-                  <p className="text-sm text-gray-500 mt-1 line-clamp-2">
-                    {p.short}
-                  </p>
-                </div>
-                <button
-                  onClick={() => setModalProject(p)}
-                  className="ml-2 text-indigo-600 hover:text-indigo-800 text-sm font-medium"
-                  aria-label={`Read more about ${p.title}`}
-                >
-                  Read
-                </button>
-              </div>
-
-              <div className="mt-3 flex flex-wrap gap-2">
-                {p.tech.map((t) => (
-                  <span
-                    key={t}
-                    className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-700"
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </article>
+        {/* ── Items ── */}
+        {PROJECTS.map((project, i) => (
+          <TimelineItem
+            key={project.id}
+            project={project}
+            index={i}
+            accent={ACCENTS[i % ACCENTS.length]}
+          />
         ))}
       </div>
-
-      {/* Empty state */}
-      {filtered.length === 0 && (
-        <div className="mt-12 text-center text-gray-500">
-          No projects found. Try a different filter or search.
-        </div>
-      )}
-
-      {/* Modal */}
-      {modalProject && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          role="dialog"
-          aria-modal="true"
-        >
-          {/* backdrop */}
-          <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setModalProject(null)}
-          />
-
-          {/* modal card */}
-          <div className="relative bg-white rounded-2xl shadow-2xl max-w-3xl w-full overflow-hidden">
-            <div className="flex flex-col md:flex-row">
-              <div className="md:w-1/2 h-64 md:h-auto">
-                <img
-                  src={modalProject.img}
-                  alt={modalProject.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              <div className="md:w-1/2 p-6  bg-zinc-300">
-                <div className="flex justify-between items-start gap-4">
-                  <div>
-                    <h3 className="text-2xl font-semibold text-gray-900">
-                      {modalProject.title}
-                    </h3>
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      {modalProject.tech.map((t) => (
-                        <span
-                          key={t}
-                          className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-700"
-                        >
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => setModalProject(null)}
-                    className="text-gray-400 hover:text-gray-600"
-                    aria-label="Close project modal"
-                  >
-                    ✕
-                  </button>
-                </div>
-
-                <p className="mt-4 text-gray-600">{modalProject.short}</p>
-
-                <div className="mt-6 flex gap-3">
-                  <a
-                    href={modalProject.live}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm hover:bg-indigo-700"
-                  >
-                    Open Live
-                  </a>
-
-                  <a href={modalProject.gitRepoLink}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm hover:bg-indigo-700 ">Show Code</a>
-
-
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   );
 }

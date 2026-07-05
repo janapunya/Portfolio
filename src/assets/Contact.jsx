@@ -1,197 +1,104 @@
-import React, { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { CONTACT_LINKS } from "./data";
 
-export default function ContactInfo() {
-  const phone = "747786227";
-  const email = "punyabratajana022@gmail.com";
-
-  const [toast, setToast] = useState("");
-
-  const showToast = (msg) => {
-    setToast(msg);
-    window.setTimeout(() => setToast(""), 2600);
-  };
-
-  async function copyText(text, label) {
-    try {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(text);
-      } else {
-        const ta = document.createElement("textarea");
-        ta.value = text;
-        ta.style.position = "fixed";
-        ta.style.left = "-9999px";
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand("copy");
-        document.body.removeChild(ta);
-      }
-      showToast(`${label} copied`);
-    } catch (err) {
-      showToast("Copy failed");
-    }
-  }
-
-  function downloadVCard() {
-    const name = "Punyabrata Jana";
-    const vcard = [
-      "BEGIN:VCARD",
-      "VERSION:3.0",
-      `FN:${name}`,
-      `TEL;TYPE=CELL:${phone}`,
-      `EMAIL;TYPE=INTERNET:${email}`,
-      "END:VCARD",
-    ].join("\n");
-
-    const blob = new Blob([vcard], { type: "text/vcard" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "punyabrata-jana.vcf";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-    showToast("vCard downloaded");
-  }
+function ContactCard({ item }) {
+  const [hov, setHov] = useState(false);
 
   return (
-    <section className="max-w-3xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-12">
-      <div className="bg-stone-900/80 rounded-2xl p-5 sm:p-8 shadow-lg">
-        <div className="flex flex-col sm:flex-row items-start gap-5">
-          {/* Avatar */}
-          <div className="flex-shrink-0">
-            <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-lg bg-amber-500 grid place-items-center text-stone-900 font-bold text-lg sm:text-xl">
-              PJ
-            </div>
-          </div>
-
-          {/* Contact Details */}
-          <div className="flex-1 w-full">
-            <h2 className="text-xl sm:text-2xl font-semibold text-white">
-              Contact
-            </h2>
-            <p className="mt-2 text-sm sm:text-base text-zinc-300 leading-relaxed">
-              You can reach me directly using the phone number or email below. No
-              form — just direct contact.
-            </p>
-
-            <div className="mt-6 space-y-4">
-              {/* Phone */}
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-stone-800/50 rounded-lg p-3">
-                <div className="flex items-center gap-3">
-                  <svg
-                    className="h-6 w-6 text-amber-400 flex-shrink-0"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    aria-hidden
-                  >
-                    <path
-                      d="M3 5v4a2 2 0 0 0 2 2h.9a1 1 0 0 1 .9.56L8.6 14.9a15 15 0 0 0 0 0 0 6.5 6.5l2.4-1a1 1 0 0 1 .9-.1H19a2 2 0 0 0 2 2v3"
-                      stroke="currentColor"
-                      strokeWidth="1.2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  <div className="min-w-0">
-                    <div className="text-xs text-zinc-400">Phone</div>
-                    <a
-                      href={`tel:${phone}`}
-                      className="text-sm sm:text-base text-white font-medium hover:underline break-all"
-                    >
-                      {phone}
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex gap-2 flex-wrap">
-                  <button
-                    onClick={() => (window.location.href = `tel:${phone}`)}
-                    className="px-3 py-1 rounded-md bg-amber-500 text-stone-900 text-sm hover:scale-105 transition"
-                  >
-                    Call
-                  </button>
-                  <button
-                    onClick={() => copyText(phone, "Phone")}
-                    className="px-3 py-1 rounded-md border border-zinc-700 text-sm text-zinc-200 hover:bg-zinc-800 transition"
-                  >
-                    Copy
-                  </button>
-                </div>
-              </div>
-
-              {/* Email */}
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-stone-800/50 rounded-lg p-3">
-                <div className="flex items-center gap-3">
-                  <svg
-                    className="h-6 w-6 text-amber-400 flex-shrink-0"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    aria-hidden
-                  >
-                    <path
-                      d="M3 8.5l8.5 6L20 8.5"
-                      stroke="currentColor"
-                      strokeWidth="1.2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <rect
-                      x="3"
-                      y="4"
-                      width="18"
-                      height="16"
-                      rx="2"
-                      stroke="currentColor"
-                      strokeWidth="1.2"
-                    />
-                  </svg>
-                  <div className="min-w-0">
-                    <div className="text-xs text-zinc-400">Email</div>
-                    <a
-                      href={`mailto:${email}`}
-                      className="text-sm sm:text-base text-white font-medium hover:underline break-all"
-                    >
-                      {email}
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex gap-2 flex-wrap">
-                  <a
-                    href={`mailto:${email}`}
-                    className="px-3 py-1 rounded-md bg-amber-500 text-stone-900 text-sm hover:scale-105 transition"
-                  >
-                    Email
-                  </a>
-                  <button
-                    onClick={() => copyText(email, "Email")}
-                    className="px-3 py-1 rounded-md border border-zinc-700 text-sm text-zinc-200 hover:bg-zinc-800 transition"
-                  >
-                    Copy
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-6 text-xs sm:text-sm text-zinc-400">
-              Note: I prefer direct email or phone. No form — direct contact
-              only.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Toast */}
+    <a
+      href={item.href}
+      target="_blank"
+      rel="noreferrer"
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      className="rounded-2xl p-5 no-underline block transition-all duration-300"
+      style={{
+        background: hov ? "#16162a" : "#0e0e1c",
+        border:     `1px solid ${hov ? "rgba(124,111,255,0.45)" : "rgba(124,111,255,0.18)"}`,
+        transform:  hov ? "translateY(-8px)" : "translateY(0)",
+        boxShadow:  hov ? "0 24px 44px rgba(124,111,255,0.22)" : "none",
+      }}
+    >
       <div
-        aria-live="polite"
-        className={`fixed left-1/2 transform -translate-x-1/2 bottom-6 z-50 transition-all ${
-          toast ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
+        className="w-11 h-11 rounded-xl flex items-center justify-center text-xl mb-3.5"
+        style={{ background: item.bg }}
       >
-        <div className="bg-stone-900 text-zinc-100 px-4 py-2 rounded-md shadow-md">
-          {toast}
+        {item.icon}
+      </div>
+      <div className="text-[10px] font-mono tracking-widest uppercase text-[#6868a0] mb-1">
+        {item.label}
+      </div>
+      <div className="text-sm font-semibold text-[#e8e4f0]">{item.val}</div>
+    </a>
+  );
+}
+
+export default function Contact() {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => e.target.classList.toggle("opacity-100", e.isIntersecting)),
+      { threshold: 0.1 }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section
+      id="contact"
+      ref={sectionRef}
+      className="relative z-10 px-10 md:px-16 py-28 overflow-hidden opacity-0 transition-opacity duration-700"
+      style={{ background: "linear-gradient(135deg,#0a0820 0%,#060610 100%)" }}
+    >
+      {/* Radial glow backdrop */}
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          top: "-200px", left: "50%", transform: "translateX(-50%)",
+          width: 800, height: 600,
+          background: "radial-gradient(ellipse,rgba(124,111,255,0.1),transparent 70%)",
+        }}
+      />
+
+      <div className="max-w-2xl mx-auto text-center relative z-10">
+        {/* Label */}
+        <div className="inline-flex items-center gap-3 text-purple-400 text-[11px] tracking-[0.2em] uppercase font-mono mb-4 justify-center">
+          <span className="w-6 h-px bg-purple-500 inline-block" />
+          Let's Connect
         </div>
+
+        {/* Headline */}
+        <h2
+          className="font-black tracking-[-0.04em] leading-[0.93] mb-6"
+          style={{
+            fontFamily: "'Syne',sans-serif",
+            fontSize: "clamp(3rem,6vw,5.2rem)",
+            background: "linear-gradient(135deg,#fff 0%,rgba(255,255,255,0.55) 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+          }}
+        >
+          Let's build<br />something great.
+        </h2>
+
+        <p className="text-base text-[rgba(232,228,240,0.42)] font-light mb-14 leading-relaxed">
+          Open to internships, freelance projects and collaborations.<br />
+          Reach out — I'd love to hear from you.
+        </p>
+
+        {/* Contact cards */}
+        <div className="grid grid-cols-3 gap-3.5 mb-11">
+          {CONTACT_LINKS.map((item) => (
+            <ContactCard key={item.label} item={item} />
+          ))}
+        </div>
+
+        {/* Portfolio CTA */}
+       
       </div>
     </section>
   );

@@ -1,85 +1,32 @@
-import React, { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { div } from "framer-motion/client";
+const ITEMS = [
+  "React", "Node.js", "MongoDB", "Express", "JavaScript",
+  "HTML5", "CSS3", "EJS", "Git", "Python", "MySQL", "REST APIs",
+  "MERN Stack", "Full Stack Dev", "BCA · MAKAUT",
+];
 
-const RollingText = () => {
-  const scrollRef = useRef(null);
-  const tweenRef = useRef(null);
-
-  // content to show (edit if you want)
-  const items = [
-    "MERN",
-    "FRONTEND",
-    "BACKEND",
-    "FULL-STACK",
-    "WEB-DEVELOPMENT",
-  ];
-
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-
-    const createAnimation = () => {
-      if (tweenRef.current) tweenRef.current.kill();
-      gsap.set(el, { x: 0 });
-
-      const totalWidth = el.scrollWidth;
-      const singleWidth = totalWidth / 2 || 0;
-
-      const speed = 120; // pixels / second (keep or tweak)
-      const duration = singleWidth / speed;
-
-      tweenRef.current = gsap.to(el, {
-        x: singleWidth,
-        duration: Math.max(duration, 0.02),
-        ease: "none",
-        repeat: -1,
-        modifiers: {
-          x: (x) => {
-            const v = parseFloat(x);
-            let mod = v % singleWidth;
-            if (mod > 0) mod -= singleWidth;
-            return `${mod}px`;
-          },
-        },
-      });
-    };
-
-    const ro = new ResizeObserver(() => createAnimation());
-    ro.observe(el);
-    window.addEventListener("resize", createAnimation);
-    createAnimation();
-
-    return () => {
-      if (tweenRef.current) tweenRef.current.kill();
-      ro.disconnect();
-      window.removeEventListener("resize", createAnimation);
-    };
-  }, [items]);
+export default function Rolling_text() {
+  const doubled = [...ITEMS, ...ITEMS]; // seamless loop
 
   return (
-
-
-    <div className=" h-15 flex items-center bg-stone-600 rotate-[-6deg] max-w-[110%] translate-x-[-10px]">
-
+    <div className="w-full overflow-hidden py-3 border-y border-purple-500/15 bg-[#0e0e1c]/60 backdrop-blur-sm">
       <div
-        ref={scrollRef}
-        className="flex items-center whitespace-nowrap gap-15 py-3 px-8"
-        aria-hidden="false"
+        className="inline-flex gap-10 whitespace-nowrap"
+        style={{ animation: "marquee 28s linear infinite" }}
       >
-        {[...items, ...items].map((text, i) => (
-          <div
-            key={i}
-            className="inline-flex items-center gap-4 px-6 py-2 select-none"
-          >
-            <h1 className="text-2xl font-medium tracking-wider">{text}</h1>
-            <span className="h-4 w-4 ml-15 rounded-full bg-amber-600 inline-block" />
-          </div>
+        {doubled.map((item, i) => (
+          <span key={i} className="inline-flex items-center gap-3 text-[11px] tracking-[0.16em] uppercase font-mono text-slate-400">
+            {item}
+            <span className="text-purple-500 text-[7px]">◆</span>
+          </span>
         ))}
       </div>
+
+      <style>{`
+        @keyframes marquee {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
+        }
+      `}</style>
     </div>
-
   );
-};
-
-export default RollingText;
+}

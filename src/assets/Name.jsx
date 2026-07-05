@@ -3,7 +3,7 @@ import gsap from 'gsap';
 
 export default function AnimatedText() {
   const refs = useRef([]);
-  const text = " Punyabrata Jana";
+  const text = " Punyabrata";
 
   useEffect(() => {
     gsap.from(refs.current, {
@@ -16,16 +16,12 @@ export default function AnimatedText() {
   }, []);
 
   return (
-    <span className='flex overflow-hidden text-white'>
+    <span className='flex overflow-hidden '>
   {text.split('').map((c, i) => (
     <span  
       key={i} 
       ref={el => refs.current[i] = el}
-      className='text-zinc-900'
-      style={{ 
-        whiteSpace: 'pre',
-        WebkitTextStroke: '1px oklch(82.8% 0.189 84.429)',        
-      }}
+     
     >
       {c}
     </span>
