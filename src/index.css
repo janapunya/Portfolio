@@ -1,8 +1,118 @@
-@import "tailwindcss";
-@font-face {
-    font-family: Montserrat;
-    src: url(/font/WDXL_Lubrifont_TC/WDXLLubrifontTC-Regular.ttf);
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
 }
-*{
-    font-family: Montserrat;
+
+body {
+  background: #0a0a08;
+  color: #f4f1ea;
+  cursor: none;
+}
+
+@media (hover: none) {
+  body {
+    cursor: auto;
+  }
+}
+
+::selection {
+  background: #cda86c;
+  color: #0a0a08;
+}
+
+.eyebrow-rule {
+  background: #5c594f;
+}
+
+.dot-sep {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #c9c2af;
+  display: inline-block;
+}
+
+.scroll-arrow {
+  width: 1px;
+  height: 34px;
+  background: linear-gradient(#6b6656, transparent);
+  position: relative;
+  overflow: hidden;
+}
+.scroll-arrow::after {
+  content: '';
+  position: absolute;
+  top: -40%;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background: #15130f;
+  animation: trickle 1.6s ease-in-out infinite;
+}
+@keyframes trickle {
+  0% {
+    top: -40%;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spin-slow {
+  animation: spin-slow 14s linear infinite;
+}
+.spin-med {
+  animation: spin-slow 10s linear infinite;
+}
+.spin-fast {
+  animation: spin-slow 1.1s linear infinite;
+}
+
+.nav-link {
+  position: relative;
+  padding-bottom: 2px;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.35s ease;
+}
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.grain-box::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.02) 0 1px,
+    transparent 1px 3px
+  );
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 22s linear infinite;
 }
