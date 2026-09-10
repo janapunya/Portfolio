@@ -88,9 +88,9 @@ export default function Contact() {
                   href={l.href}
                   target={l.external ? '_blank' : undefined}
                   rel={l.external ? 'noopener noreferrer' : undefined}
-                  className="flex items-center justify-between gap-3.5 border border-white/10 rounded-lg px-4.5 py-4 hover:border-gold hover:bg-gold/5 transition-colors cursor-hover"
+                  className="flex items-center justify-between gap-3.5 border border-white/10 rounded-lg px-4.5 py-4 hover:border-gold hover:bg-gold/5 transition-colors cursor-hover px-2"
                 >
-                  <div className="flex items-center gap-3.5">
+                  <div className="flex items-center gap-3.5 ">
                     <div className="w-8.5 h-8.5 w-[34px] h-[34px] rounded-full bg-gold/10 flex items-center justify-center text-sm text-gold-2">
                       {l.icon}
                     </div>
